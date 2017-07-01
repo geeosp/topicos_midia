@@ -28,7 +28,7 @@ public class GeoParticleSystem : MonoBehaviour
 
     float lastTimeFired;
 
-    void FixedUpdate()
+    void Update()
     {
         GeoParticle.separationForce = separationForce;
         GeoParticle.coesionForce = coesionForce;
@@ -39,7 +39,6 @@ public class GeoParticleSystem : MonoBehaviour
         particlesText.text = "" + particles.Length;
         if (particles.Length < particleQuantity)
         {
-
             float quantity = (Time.time - lastTimeFired) * particlesPerSecond;
             if (quantity > 1)
             {

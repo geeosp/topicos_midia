@@ -26,7 +26,11 @@ public class GeoParticle : MonoBehaviour
     Vector3 tmp_vel_component;
     Vector3 desiredVelocity;
     Vector3 force;
-        void FixedUpdate()
+    private void LateUpdate()
+    {
+        transform.rotation = Quaternion.LookRotation(body.velocity);
+    }
+    void FixedUpdate()
     {
 
         sphere.radius = particleFieldOfVision;
@@ -39,11 +43,10 @@ public class GeoParticle : MonoBehaviour
 
 
 
+
+
       force= desiredVelocity - body.velocity;
         body.AddForce(force);
-
-
-
 
 
 
@@ -88,6 +91,11 @@ public class GeoParticle : MonoBehaviour
         neighborhoods.Add(c);
 
     }
+    public void OnTriggerExit(Collider other)
+    {
+        neighborhoods.Remove(other);
+    }
+    /*
     public void OnTriggerStay(Collider c)
     {
         if (!neighborhoods.Contains(c))
@@ -95,11 +103,6 @@ public class GeoParticle : MonoBehaviour
             neighborhoods.Add(c);
         }
     }
-    public void OnTriggerExit(Collider other)
-    {
-        neighborhoods.Remove(other);
-    }
-    /*
     public void feeltheOther(Collider c)
     {
 
