@@ -14,7 +14,7 @@ public class GeoParticleSystem : MonoBehaviour
     public float particleVelocity;
     public Transform particleTarget;
     public GeoParticle particlePrefab;
-
+    public TextMesh particlesText;
 
 
 
@@ -36,7 +36,7 @@ public class GeoParticleSystem : MonoBehaviour
         GeoParticle.target = particleTarget;
         GeoParticle.velocity = particleVelocity;
         GameObject[] particles = GameObject.FindGameObjectsWithTag("Particle");
-
+        particlesText.text = "" + particles.Length;
         if (particles.Length < particleQuantity)
         {
 
