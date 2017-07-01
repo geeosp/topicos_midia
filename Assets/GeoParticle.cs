@@ -29,15 +29,15 @@ public class GeoParticle : MonoBehaviour
 
 
 
-        print("oi");
+     
        
 
 
         Rigidbody body = GetComponent<Rigidbody>();
         Vector3 desiredVelocity = new Vector3();
-        desiredVelocity += seekTarget();
+        desiredVelocity += seekTarget(target, velocity, particleFieldOfVision);
 
-        print(desiredVelocity);
+        
 
 
         Vector3 force = desiredVelocity - body.velocity;
@@ -50,25 +50,28 @@ public class GeoParticle : MonoBehaviour
 
     }
 
-    Vector3 seekTarget()
+    Vector3 seekTarget(Transform target, float velocity, float distanceToBreak)
     {
         Vector3 d = target.position - transform.position;
-        if(d.magnitude > particleFieldOfVision)
-        {
-            d = d.normalized * velocity;
-        }
-        else
-        {
-            d = d.normalized * d.magnitude;
-        }
+
+
+
+
+        d = velocity * Vector3.Slerp(Vector3.zero,d.normalized,  Mathf.Min(1, d.sqrMagnitude / (distanceToBreak * distanceToBreak)));
+
+
 
         return d;
     }
 
     public void born(float life)
     {
-        //   collidersArray = new Collider[collidersArray.Length + 1];
+        Start();
     }
+
+
+
+    /*
 
     public void OnTriggerEnter(Collider c)
 
@@ -99,6 +102,7 @@ public class GeoParticle : MonoBehaviour
     }
 
 
+    */
     public void OnDrawGizmosSelected()
     {
         Color color = Color.yellow;
