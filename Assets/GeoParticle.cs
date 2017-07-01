@@ -8,10 +8,13 @@ public class GeoParticle : MonoBehaviour
 
     // public static Collider[] collidersArray = new Collider[1];
     List<Collider> neighborhoods;
+
     public static float separationForce;
+    [Range(0, 1)]
+    public static float alignForce;
+    [Range(0, 1)]
     public static float coesionForce;
     public static float particleFieldOfVision;
-
     public static Transform target;
     public static float velocity;
     Rigidbody body; SphereCollider sphere;
@@ -34,18 +37,20 @@ public class GeoParticle : MonoBehaviour
     {
 
         sphere.radius = particleFieldOfVision;
-
         desiredVelocity = Vector3.zero;
         seekTarget(target, velocity, particleFieldOfVision, out tmp_vel_component);
         desiredVelocity += tmp_vel_component;
         separate(neighborhoods, separationForce, particleFieldOfVision, out tmp_vel_component);
         desiredVelocity += tmp_vel_component;
 
+        align(neighborhoods, velocity, alignForce, out tmp_vel_component);
+        desiredVelocity += tmp_vel_component;
+        /*
+
+        */
 
 
-
-
-      force= desiredVelocity - body.velocity;
+        force = Vector3.ClampMagnitude(desiredVelocity, velocity) - body.velocity;
         body.AddForce(force);
 
 
@@ -68,7 +73,7 @@ public class GeoParticle : MonoBehaviour
         foreach (Collider c in others)
         {
             Vector3 dst = transform.position - c.transform.position;
-            dst = separationforce*Vector3.Slerp( dst.normalized, Vector3.zero, Mathf.Min(1, dst.sqrMagnitude / (distanceToWork)));
+            dst = separationforce * Vector3.Slerp(dst.normalized, Vector3.zero, Mathf.Min(1, dst.sqrMagnitude / (distanceToWork)));
             d += dst;
         }
         if (others.Count > 0)
@@ -76,6 +81,50 @@ public class GeoParticle : MonoBehaviour
 
     }
 
+
+
+    void align(List<Collider> others, float maxVelocity, float alignforce, out Vector3 d)
+    {
+        d = Vector3.zero;
+        if (others.Count > 0)
+        {
+            Rigidbody rb;
+            foreach (Collider c in others)
+            {
+                rb = c.gameObject.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    d += rb.velocity;
+                }
+            }
+
+            d=Vector3.ClampMagnitude(d, maxVelocity * alignforce);
+        }
+
+
+    }
+    /*
+    void coesion(List<Collider> others, Vector3 currentVelocity, float force, out Vector3 d)
+    {
+        d = Vector3.zero;
+        if (others.Count > 0)
+        {
+            Rigidbody rb;
+            foreach (Collider c in others)
+            {
+                rb = c.gameObject.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    d += rb.velocity - currentVelocity;
+                }
+            }
+        }
+        d = Vector3.ClampMagnitude(d, force);
+
+
+    }
+
+        */
 
     public void born(float life)
     {

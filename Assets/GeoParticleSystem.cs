@@ -8,8 +8,14 @@ public class GeoParticleSystem : MonoBehaviour
     public float particleLife;
     public long particleQuantity;
     public float particlesPerSecond;
+
+
     public float separationForce;
+    [Range(0, 1)]
+
     public float coesionForce;
+    [Range(0, 1)]
+    public float alignForce;
     public float particleFieldOfVision;
     public float particleVelocity;
     public Transform particleTarget;
@@ -35,6 +41,7 @@ public class GeoParticleSystem : MonoBehaviour
         GeoParticle.particleFieldOfVision = particleFieldOfVision;
         GeoParticle.target = particleTarget;
         GeoParticle.velocity = particleVelocity;
+        GeoParticle.alignForce = alignForce;
         GameObject[] particles = GameObject.FindGameObjectsWithTag("Particle");
         particlesText.text = "" + particles.Length;
         if (particles.Length < particleQuantity)

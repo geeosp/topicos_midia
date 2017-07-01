@@ -283,7 +283,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 88973370}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -6.926}
+  m_LocalPosition: {x: 0, y: 0, z: -7.32}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 31448289}
@@ -408,10 +408,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   particleLife: 0
-  particleQuantity: 20
-  particlesPerSecond: 2
-  separationForce: 1
-  coesionForce: 1
+  particleQuantity: 200
+  particlesPerSecond: 3
+  separationForce: 0
+  coesionForce: 0
+  alignForce: 0
   particleFieldOfVision: 1
   particleVelocity: 15
   particleTarget: {fileID: 88973372}
