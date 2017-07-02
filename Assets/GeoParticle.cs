@@ -57,10 +57,10 @@ public class GeoParticle : MonoBehaviour
             ;
 
 
+        desiredVelocity = Vector3.ClampMagnitude(desiredVelocity * velocity, velocity);
 
 
-
-        force = Vector3.ClampMagnitude(desiredVelocity- body.velocity, velocity) ;
+        force = desiredVelocity- body.velocity ;
         body.AddForce(force);
 
 
@@ -72,8 +72,8 @@ public class GeoParticle : MonoBehaviour
     {
         d = target.position - transform.position;
         distanceToBreak *= distanceToBreak;
-        d = maxVelocity * Vector3.Slerp(Vector3.zero, d.normalized, Mathf.Min(1, d.magnitude / (distanceToBreak)));
-
+        d =  Vector3.Slerp(Vector3.zero, d.normalized, Mathf.Min(1, d.magnitude / (distanceToBreak)));
+        d.Normalize();
     }
 
     void separate(List<Collider> others, float maxVelocity, float distanceToWork, out Vector3 d)
@@ -90,7 +90,7 @@ public class GeoParticle : MonoBehaviour
                 d += dst;
             }
             //     d = d / others.Count;
-            d = Vector3.ClampMagnitude(d * maxVelocity, maxVelocity);
+            d.Normalize();
         }
 
     }
@@ -112,7 +112,7 @@ public class GeoParticle : MonoBehaviour
                 }
             }
 
-            d = Vector3.ClampMagnitude(d, maxVelocity);
+            d.Normalize();
         }
 
 
