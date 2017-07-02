@@ -5,25 +5,30 @@ using UnityEngine;
 public class GeoParticle : MonoBehaviour
 {
 
-
+   
     // public static Collider[] collidersArray = new Collider[1];
-    List<Collider> neighborhoods;
+    public List<Collider> neighbors;
+    public List<GeoParticle> buddies;
+    public int particleKind;
 
+    [Range(0, 1)]
     public static float separationForce;
     [Range(0, 1)]
     public static float alignForce;
     [Range(0, 1)]
     public static float coesionForce;
+    [Range(0, 1)]
     public static float seekForce;
     public static float particleFieldOfVision;
     public static Transform target;
     public static float velocity;
     public static float separationDistance;
+    public static int neighborLimit;
     Rigidbody body; SphereCollider sphere;
     // Use this for initialization
     void Start()
     {
-        neighborhoods = new List<Collider>();
+        neighbors = new List<Collider>();
         body = GetComponent<Rigidbody>(); sphere = GetComponent<SphereCollider>();
     }
 
@@ -31,7 +36,7 @@ public class GeoParticle : MonoBehaviour
     Vector3 seek_comp, align_comp, separate_comp, coesion_comp;
     Vector3 desiredVelocity;
     Vector3 force;
- 
+
 
     private void LateUpdate()
     {
@@ -41,12 +46,10 @@ public class GeoParticle : MonoBehaviour
     {
         sphere.radius = particleFieldOfVision;
 
-
-
-        seekTarget(target, velocity, particleFieldOfVision, out seek_comp);
-        separate(neighborhoods,velocity,  separationDistance, out separate_comp);
-        align(neighborhoods, velocity, out align_comp);
-
+        seekTarget(target, particleFieldOfVision, out seek_comp);
+        separate(neighbors, separationDistance, out separate_comp);
+        align(buddies, out align_comp);
+        coesion(buddies, transform.position, out coesion_comp);
 
 
         desiredVelocity = Vector3.zero
@@ -56,11 +59,8 @@ public class GeoParticle : MonoBehaviour
             + separate_comp * separationForce
             ;
 
-
         desiredVelocity = Vector3.ClampMagnitude(desiredVelocity * velocity, velocity);
-
-
-        force = desiredVelocity- body.velocity ;
+        force = desiredVelocity - body.velocity;
         body.AddForce(force);
 
 
@@ -68,18 +68,18 @@ public class GeoParticle : MonoBehaviour
     }
 
 
-    void seekTarget(Transform target, float maxVelocity, float distanceToBreak, out Vector3 d)
+    void seekTarget(Transform target, float distanceToBreak, out Vector3 d)
     {
         d = target.position - transform.position;
         distanceToBreak *= distanceToBreak;
-        d =  Vector3.Slerp(Vector3.zero, d.normalized, Mathf.Min(1, d.magnitude / (distanceToBreak)));
+        d = Vector3.Slerp(Vector3.zero, d.normalized, Mathf.Min(1, d.magnitude / (distanceToBreak)));
         d.Normalize();
     }
 
-    void separate(List<Collider> others, float maxVelocity, float distanceToWork, out Vector3 d)
+    void separate(List<Collider> others, float distanceToWork, out Vector3 d)
     {
         d = Vector3.zero;
-      
+
         if (others.Count > 0)
         {
 
@@ -96,14 +96,14 @@ public class GeoParticle : MonoBehaviour
     }
 
 
-
-    void align(List<Collider> others, float maxVelocity, out Vector3 d)
+    Rigidbody rb;
+    void align(List<GeoParticle> others, out Vector3 d)
     {
         d = Vector3.zero;
         if (others.Count > 0)
         {
-            Rigidbody rb;
-            foreach (Collider c in others)
+            
+            foreach (GeoParticle c in others)
             {
                 rb = c.gameObject.GetComponent<Rigidbody>();
                 if (rb != null)
@@ -117,68 +117,67 @@ public class GeoParticle : MonoBehaviour
 
 
     }
-    /*
-    void coesion(List<Collider> others, Vector3 currentVelocity, float force, out Vector3 d)
+
+    void coesion(List<GeoParticle> others, Vector3 currPosition, out Vector3 d)
     {
         d = Vector3.zero;
         if (others.Count > 0)
         {
-            Rigidbody rb;
-            foreach (Collider c in others)
+
+            foreach (GeoParticle c in others)
             {
-                rb = c.gameObject.GetComponent<Rigidbody>();
-                if (rb != null)
-                {
-                    d += rb.velocity - currentVelocity;
-                }
+                d += c.transform.position;
             }
+
+
+            d = (d / others.Count) - currPosition;
+
+            d.Normalize();
         }
-        d = Vector3.ClampMagnitude(d, force);
+
 
 
     }
 
-        */
 
-    public void born(float life)
+
+    public void born(int particleKind, float life)
     {
+        this.particleKind = particleKind;
         Start();
     }
 
 
 
 
-    public void OnTriggerEnter(Collider c)
+        GeoParticle _tmp_collider;
+
+
+
+
+
+    public void OnTriggerEnter(Collider other)
 
     {
-        neighborhoods.Add(c);
-
+        if (neighbors.Count < neighborLimit)
+            neighbors.Add(other);
+        _tmp_collider = other.gameObject.GetComponent<GeoParticle>();
+        if(_tmp_collider!=null&&_tmp_collider.particleKind == particleKind)
+        {
+            buddies.Add(_tmp_collider);
+        }
     }
     public void OnTriggerExit(Collider other)
     {
-        neighborhoods.Remove(other);
-    }
-    /*
-    public void OnTriggerStay(Collider c)
-    {
-        if (!neighborhoods.Contains(c))
+        neighbors.Remove(other);
+        _tmp_collider = other.gameObject.GetComponent<GeoParticle>();
+        if (_tmp_collider != null)
         {
-            neighborhoods.Add(c);
+            buddies.Remove(_tmp_collider);
         }
+
     }
-    public void feeltheOther(Collider c)
-    {
-
-        if (c.gameObject != gameObject)
-        {
-            Rigidbody rigidBody = GetComponent<Rigidbody>();
-            rigidBody.AddForce((c.gameObject.transform.position - transform.position).normalized * 2);
-
-        }
-    }
-
-
-    */
+   
     public void OnDrawGizmosSelected()
     {
         Color color = Color.yellow;
@@ -186,4 +185,5 @@ public class GeoParticle : MonoBehaviour
         Gizmos.color = color;
         Gizmos.DrawSphere(transform.position, particleFieldOfVision);
     }
+   
 }

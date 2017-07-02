@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GeoParticleSystem : MonoBehaviour
 {
-
+    public int particleKind;
     public float particleLife;
     public long particleQuantity;
     public float particlesPerSecond;
@@ -24,14 +24,15 @@ public class GeoParticleSystem : MonoBehaviour
     public GeoParticle particlePrefab;
     public TextMesh particlesText;
     public  float separationDistance;
-
-
+    public int neighborLimit = 10;
+    public List<GeoParticle> particles;
 
 
     // Use this for initialization
     void Start()
     {
         lastTimeFired = Time.time;
+        particles = new List<GeoParticle>();
     }
 
     float lastTimeFired;
@@ -46,13 +47,14 @@ public class GeoParticleSystem : MonoBehaviour
         GeoParticle.alignForce = alignForce;
         GeoParticle.seekForce = seekForce;
         GeoParticle.separationDistance = separationDistance;
+        GeoParticle.neighborLimit = neighborLimit;
     }
     private void FixedUpdate()
     {
-        GameObject[] particles = GameObject.FindGameObjectsWithTag("Particle");
+      //  GameObject[] particles = GameObject.FindGameObjectsWithTag("Particle");
     
-            particlesText.text = "" + particles.Length;
-        if (particles.Length < particleQuantity)
+            particlesText.text = "" + particles.Count;
+        if (particles.Count < particleQuantity)
         {
             float quantity = (Time.time - lastTimeFired) * particlesPerSecond;
             if (quantity > 1)
@@ -60,10 +62,11 @@ public class GeoParticleSystem : MonoBehaviour
                 lastTimeFired = Time.time;
                 //  print(" particles lenght: " + particles.Length + "quantity" + quantity);
                             int i = 0;
-                while (i < Mathf.Min(quantity, particleQuantity - particles.Length))
+                while (i < Mathf.Min(quantity, particleQuantity - particles.Count))
                 {
                     GeoParticle particle = GameObject.Instantiate(particlePrefab, transform.position+ (new Vector3(Random.value, Random.value)), transform.rotation);
-                    particle.born(particleLife);
+                    particle.born(particleKind, particleLife);
+                    particles.Add(particle);
                     i++;
                 }
             }
