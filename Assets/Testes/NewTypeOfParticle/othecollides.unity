@@ -218,27 +218,17 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114392877224530262, guid: a196dadef3b90e74b8c8fb0ebdb9f0c0,
         type: 2}
+      propertyPath: particleTarget
+      value: 
+      objectReference: {fileID: 88973372}
+    - target: {fileID: 114392877224530262, guid: a196dadef3b90e74b8c8fb0ebdb9f0c0,
+        type: 2}
       propertyPath: particlesText
       value: 
       objectReference: {fileID: 1109415700}
     - target: {fileID: 1239428759312068, guid: a196dadef3b90e74b8c8fb0ebdb9f0c0, type: 2}
       propertyPath: m_Name
       value: ParticleSystem_500
-      objectReference: {fileID: 0}
-    - target: {fileID: 114392877224530262, guid: a196dadef3b90e74b8c8fb0ebdb9f0c0,
-        type: 2}
-      propertyPath: seekForce
-      value: 0.751
-      objectReference: {fileID: 0}
-    - target: {fileID: 114392877224530262, guid: a196dadef3b90e74b8c8fb0ebdb9f0c0,
-        type: 2}
-      propertyPath: particleTarget
-      value: 
-      objectReference: {fileID: 88973372}
-    - target: {fileID: 114392877224530262, guid: a196dadef3b90e74b8c8fb0ebdb9f0c0,
-        type: 2}
-      propertyPath: particleQuantity
-      value: 200
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a196dadef3b90e74b8c8fb0ebdb9f0c0, type: 2}

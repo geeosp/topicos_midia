@@ -5,7 +5,7 @@ using UnityEngine;
 public class GeoParticle : MonoBehaviour
 {
 
-   
+
     // public static Collider[] collidersArray = new Collider[1];
     public List<Collider> neighbors;
     public List<GeoParticle> buddies;
@@ -45,6 +45,17 @@ public class GeoParticle : MonoBehaviour
     void FixedUpdate()
     {
         sphere.radius = particleFieldOfVision;
+
+
+
+
+
+
+
+
+
+
+
 
         seekTarget(target, particleFieldOfVision, out seek_comp);
         separate(neighbors, separationDistance, out separate_comp);
@@ -102,7 +113,7 @@ public class GeoParticle : MonoBehaviour
         d = Vector3.zero;
         if (others.Count > 0)
         {
-            
+
             foreach (GeoParticle c in others)
             {
                 rb = c.gameObject.GetComponent<Rigidbody>();
@@ -150,7 +161,7 @@ public class GeoParticle : MonoBehaviour
 
 
 
-        GeoParticle _tmp_collider;
+    GeoParticle _tmp_collider;
 
 
 
@@ -160,12 +171,15 @@ public class GeoParticle : MonoBehaviour
 
     {
         if (neighbors.Count < neighborLimit)
-            neighbors.Add(other);
-        _tmp_collider = other.gameObject.GetComponent<GeoParticle>();
-        if(_tmp_collider!=null&&_tmp_collider.particleKind == particleKind)
         {
-            buddies.Add(_tmp_collider);
+            neighbors.Add(other);
+            _tmp_collider = other.gameObject.GetComponent<GeoParticle>();
+            if (_tmp_collider != null && _tmp_collider.particleKind == particleKind)
+            {
+                buddies.Add(_tmp_collider);
+            }
         }
+
     }
     public void OnTriggerExit(Collider other)
     {
@@ -177,13 +191,17 @@ public class GeoParticle : MonoBehaviour
         }
 
     }
-   
+
     public void OnDrawGizmosSelected()
     {
-        Color color = Color.yellow;
+        
+    }
+    public void OnDrawGizmos()
+    {Color color = Color.yellow;
         color.a = .5f;
         Gizmos.color = color;
-        Gizmos.DrawSphere(transform.position, particleFieldOfVision);
+ 
+        Gizmos.DrawWireSphere(transform.position, particleFieldOfVision);
+        
     }
-   
 }
