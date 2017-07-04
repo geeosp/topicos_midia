@@ -17,13 +17,16 @@ public class GeoParticleSystem : MonoBehaviour
     [Range(0, 1)]
     public float alignForce;
     [Range(0, 1)]
-    public  float seekForce;
+    public float seekForce;
+    [Range(0, 1)]
+    public float randomForce;
     public float particleFieldOfVision;
     public float particleVelocity;
     public Transform particleTarget;
     public GeoParticle particlePrefab;
     public TextMesh particlesText;
     public  float separationDistance;
+    [Range(1, 100)]
     public int neighborLimit = 10;
     public List<GeoParticle> particles;
 
@@ -46,6 +49,7 @@ public class GeoParticleSystem : MonoBehaviour
         GeoParticle.velocity = particleVelocity;
         GeoParticle.alignForce = alignForce;
         GeoParticle.seekForce = seekForce;
+        GeoParticle.randomForce = randomForce;
         GeoParticle.separationDistance = separationDistance;
         GeoParticle.neighborLimit = neighborLimit;
     }
