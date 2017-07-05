@@ -48,6 +48,8 @@ public class GeoParticle : MonoBehaviour
     {
         transform.rotation = Quaternion.LookRotation(body.velocity);
     }
+
+
     void FixedUpdate()
     {
         //    sphere.radius = particleFieldOfVision;
@@ -184,7 +186,7 @@ public class GeoParticle : MonoBehaviour
     GeoParticle _tmp_collider;
 
 
-
+    /*
 
 
     public void OnTriggerEnter(Collider other)
@@ -211,11 +213,7 @@ public class GeoParticle : MonoBehaviour
         }
 
     }
-
-    public void OnDrawGizmosSelected()
-    {
-        
-    }
+*/
     public void OnDrawGizmos()
     {Color color = Color.yellow;
         color.a = .5f;
