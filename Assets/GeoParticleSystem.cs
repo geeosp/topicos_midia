@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GeoParticleSystem : MonoBehaviour
@@ -9,7 +10,7 @@ public class GeoParticleSystem : MonoBehaviour
     public long particleQuantity;
     public float particlesPerSecond;
 
-    [Range(0, 1)]
+    [Range(0, 5)]
     public float separationForce;
     [Range(0, 1)]
 
@@ -24,7 +25,7 @@ public class GeoParticleSystem : MonoBehaviour
     public float particleVelocity;
     public Transform particleTarget;
     public GeoParticle particlePrefab;
-    public TextMesh particlesText;
+    public TextMeshPro particlesText;
     public  float separationDistance;
     [Range(1, 100)]
     public int neighborLimit = 10;
@@ -46,10 +47,10 @@ public class GeoParticleSystem : MonoBehaviour
         GeoParticle.coesionForce = coesionForce;
         GeoParticle.particleFieldOfVision = particleFieldOfVision;
         GeoParticle.target = particleTarget;
-        GeoParticle.velocity = particleVelocity;
+        GeoParticle.maxVelocity = particleVelocity;
         GeoParticle.alignForce = alignForce;
         GeoParticle.seekForce = seekForce;
-        GeoParticle.randomForce = randomForce;
+        GeoParticle.wanderForce = randomForce;
         GeoParticle.separationDistance = separationDistance;
         GeoParticle.neighborLimit = neighborLimit;
     }
@@ -68,7 +69,7 @@ public class GeoParticleSystem : MonoBehaviour
                             int i = 0;
                 while (i < Mathf.Min(quantity, particleQuantity - particles.Count))
                 {
-                    GeoParticle particle = GameObject.Instantiate(particlePrefab, transform.position+ (new Vector3(Random.value, Random.value)), transform.rotation);
+                    GeoParticle particle = GameObject.Instantiate(particlePrefab, transform.position+ 25*Random.onUnitSphere, transform.rotation);
                     particle.born(particleKind, particleLife);
                     particles.Add(particle);
                     i++;

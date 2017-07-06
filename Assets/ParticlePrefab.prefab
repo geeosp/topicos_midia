@@ -278,9 +278,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec472e148a1cb6e4aa8472144c5200fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  neighbors: []
-  buddies: []
   particleKind: 0
+  collidersarray: []
+  buddies: []
 --- !u!135 &135479618402503224
 SphereCollider:
   m_ObjectHideFlags: 1
