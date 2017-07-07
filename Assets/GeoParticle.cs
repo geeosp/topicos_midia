@@ -40,13 +40,13 @@ public class GeoParticle : MonoBehaviour
     }
     [Range(1, 100)]
     public static int neighborLimit;
- 
+
     //SphereCollider sphere;
     // Use this for initialization
     void Start()
     {
         //  neighbors = new List<Collider>();
-    
+
         //sphere = GetComponent<SphereCollider>();
         collidersarray = new Collider[neighborLimit];
         buddies = new GeoParticle[neighborLimit];
@@ -64,7 +64,7 @@ public class GeoParticle : MonoBehaviour
     {
         //    sphere.radius = particleFieldOfVision;
 
-       // UpdatePosition();
+        // UpdatePosition();
 
         collidersarray.Initialize();
         buddies.Initialize();
@@ -84,7 +84,7 @@ public class GeoParticle : MonoBehaviour
                 bud++;
             }
         }
-      
+
 
 
 
@@ -101,12 +101,12 @@ public class GeoParticle : MonoBehaviour
             + coesion_comp * coesionForce
             + random_comp * wanderForce
             + separate_comp * separationForce;
-          ;
-        
+        ;
+
         desiredVelocity = Vector3.ClampMagnitude(desiredVelocity * maxVelocity, maxVelocity);
-      
+
         force = desiredVelocity - getVelocity();
-      
+
         addForce(force);
         transform.rotation = Quaternion.LookRotation(getVelocity());
 
@@ -122,8 +122,8 @@ public class GeoParticle : MonoBehaviour
     void seekTarget(Transform target, float SqrdistanceToBreak, out Vector3 d)
     {
         d = target.position - transform.position;
-       // distanceToBreak *= distanceToBreak;
-     d = Vector3.Slerp(Vector3.zero, d.normalized, Mathf.Min(1, d.magnitude / (SqrdistanceToBreak)));
+        // distanceToBreak *= distanceToBreak;
+        d = Vector3.Slerp(Vector3.zero, d.normalized, Mathf.Min(1, d.magnitude / (SqrdistanceToBreak)));
         d.Normalize();
     }
 
@@ -135,20 +135,20 @@ public class GeoParticle : MonoBehaviour
         {
             foreach (Collider c in others)
             {
-                if (c != null&&((c.transform.position - transform.position).sqrMagnitude< SqrSeparationDistance))
+                if (c != null && ((c.transform.position - transform.position).sqrMagnitude < SqrSeparationDistance))
                 {
                     Vector3 dst = transform.position - c.transform.position;
-                   // d = Vector3.Slerp( d.normalized, Vector3.zero,Mathf.Min(1, d.magnitude / (SqrSeparationDistance)));
+                     d = d.normalized* Mathf.Lerp(1, .5f, Mathf.Min(1, d.sqrMagnitude / (SqrSeparationDistance)));
                     d += dst;
                 }
             }
             //     d = d / others.Count;
-         d.Normalize();
+            d.Normalize();
         }
 
     }
 
-    
+
     void align(GeoParticle[] others, out Vector3 d)
     {
         d = Vector3.zero;
@@ -157,10 +157,12 @@ public class GeoParticle : MonoBehaviour
 
             foreach (GeoParticle c in others)
             {
-              
+                if (c != null)
+                {
+
                     d += c.getVelocity();
-              
-            }
+
+            }}
 
             d.Normalize();
         }
@@ -168,7 +170,7 @@ public class GeoParticle : MonoBehaviour
 
     }
 
-    void coesion(GeoParticle[]others, Vector3 currPosition, out Vector3 d)
+    void coesion(GeoParticle[] others, Vector3 currPosition, out Vector3 d)
     {
         d = Vector3.zero;
         if (others.Length > 0)
@@ -176,7 +178,11 @@ public class GeoParticle : MonoBehaviour
 
             foreach (GeoParticle c in others)
             {
+                if (c != null)
+                {
+
                 d += c.transform.position;
+                }
             }
 
 
@@ -222,24 +228,25 @@ public class GeoParticle : MonoBehaviour
 
     Vector3 _currvelocity;
     Vector3 _currAcceleration;
-    
+
     public void addForce(Vector3 force)
     {
-      _currAcceleration += force;
-      
+
+        _currAcceleration += force;
+
     }
     public Vector3 getVelocity()
     {
-      // return body.velocity;
-       return _currvelocity;
+        // return body.velocity;
+        return _currvelocity;
     }
     public void UpdatePosition()
     {
         _currvelocity += _currAcceleration * Time.deltaTime;
         transform.position += _currvelocity * Time.deltaTime;
         _currAcceleration = Vector3.zero;
-   
-        }
+
+    }
 
 
     public void Update()
