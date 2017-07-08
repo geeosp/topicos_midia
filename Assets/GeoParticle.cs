@@ -5,51 +5,26 @@ using UnityEngine;
 public class GeoParticle : MonoBehaviour
 {
 
-
-    // public static Collider[] collidersArray = new Collider[1];
-    // public List<Collider> neighbors;
-
-    public int particleKind;
-
-    [Range(0, 5)]
-    public static float separationForce;
-    [Range(0, 1)]
-    public static float alignForce;
-    [Range(0, 1)]
-    public static float coesionForce;
-    [Range(0, 1)]
-    public static float seekForce;
-    [Range(0, 1)]
-    public static float wanderForce;
-    public static float particleFieldOfVision;
-    public static Transform target;
-    public static float maxVelocity;
-    static float SqrSeparationDistance;
-    static float _separationDistance;
-    public static float separationDistance
+    int particleKind
     {
         get
         {
-            return _separationDistance;
-        }
-        set
-        {
-            SqrSeparationDistance = value * value;
-            _separationDistance = value;
+            return psystem.particleKind;
         }
     }
-    [Range(1, 100)]
-    public static int neighborLimit;
 
-    //SphereCollider sphere;
+ 
+
+
+    public GeoParticleSystem psystem;
+
+
     // Use this for initialization
     void Start()
     {
-        //  neighbors = new List<Collider>();
 
-        //sphere = GetComponent<SphereCollider>();
-        collidersarray = new Collider[neighborLimit];
-        buddies = new GeoParticle[neighborLimit];
+        collidersarray = new Collider[psystem.neighborLimit];
+        buddies = new GeoParticle[psystem.neighborLimit];
     }
 
     // Update is called once per frame
@@ -69,7 +44,7 @@ public class GeoParticle : MonoBehaviour
         collidersarray.Initialize();
         buddies.Initialize();
 
-        int n = Mathf.Min(neighborLimit, Physics.OverlapSphereNonAlloc(transform.position, particleFieldOfVision, collidersarray));
+        int n = Mathf.Min(psystem.neighborLimit, Physics.OverlapSphereNonAlloc(transform.position, psystem.particleFieldOfVision, collidersarray));
         for (int i = n; i < collidersarray.Length; i++)
         {
             collidersarray[i] = null;
@@ -78,7 +53,8 @@ public class GeoParticle : MonoBehaviour
         for (int i = 0; i < n; i++)
         {
             _tmp_collider = collidersarray[i].gameObject.GetComponent<GeoParticle>();
-            if (_tmp_collider != null && _tmp_collider.particleKind == particleKind)
+
+            if (_tmp_collider != null &&(string.Compare(_tmp_collider.gameObject.name, gameObject.name)!=0)&&         _tmp_collider.particleKind == psystem.particleKind)
             {
                 buddies[bud] = _tmp_collider;
                 bud++;
@@ -88,46 +64,46 @@ public class GeoParticle : MonoBehaviour
 
 
 
+        if (psystem.seekForce > 0) seekTarget(psystem.particleTarget, psystem.separationDistance, out seek_comp);
+        if (psystem.separationForce > 0) separate(collidersarray, psystem.SqrSeparationDistance, out separate_comp);
+        if (psystem.alignForce > 0) align(buddies, out align_comp);
+        if (psystem.coesionForce > 0) coesion(buddies, transform.position, out coesion_comp);
+        if (psystem.wanderForce > 0) wander(transform.forward,transform.up,transform.right, psystem.wanderRadius, Time.time , out random_comp);
 
-        if (seekForce > 0) seekTarget(target, SqrSeparationDistance, out seek_comp);
-        if (separationForce > 0) separate(collidersarray, separationDistance, out separate_comp);
-        if (alignForce > 0) align(buddies, out align_comp);
-        if (coesionForce > 0) coesion(buddies, transform.position, out coesion_comp);
-        if (wanderForce > 0) wander(transform.forward, wanderForce, out random_comp);
 
         desiredVelocity = Vector3.zero
-            + seek_comp * seekForce
-            + align_comp * alignForce
-            + coesion_comp * coesionForce
-            + random_comp * wanderForce
-            + separate_comp * separationForce;
+            + seek_comp * psystem.seekForce
+         + align_comp * psystem.alignForce
+           + coesion_comp * psystem.coesionForce
+            + random_comp * psystem.wanderForce
+               + separate_comp * psystem.separationForce;
         ;
 
-        desiredVelocity = Vector3.ClampMagnitude(desiredVelocity * maxVelocity, maxVelocity);
+        desiredVelocity = Vector3.ClampMagnitude(desiredVelocity * psystem.maxVelocity, psystem.maxVelocity);
 
         force = desiredVelocity - getVelocity();
 
         addForce(force);
         transform.rotation = Quaternion.LookRotation(getVelocity());
-
     }
 
-    void wander(Vector3 forward, float radius, out Vector3 d)
+
+
+    float _angle;
+    Vector3 _b1, _b2;
+    void wander(Vector3 forward,Vector3 up,Vector3 right,float radius,  float fase,  out Vector3 d)
     {
 
-        d = forward;
-        d += Random.insideUnitSphere * radius;
+        d = forward + radius * (right*Mathf.Sin(fase) + up*Mathf.Cos(fase)); 
         d.Normalize();
     }
     void seekTarget(Transform target, float SqrdistanceToBreak, out Vector3 d)
     {
         d = target.position - transform.position;
-        // distanceToBreak *= distanceToBreak;
-        d = Vector3.Slerp(Vector3.zero, d.normalized, Mathf.Min(1, d.magnitude / (SqrdistanceToBreak)));
         d.Normalize();
     }
 
-    void separate(Collider[] others, float distanceToWork, out Vector3 d)
+    void separate(Collider[] others, float SqrSeparationDistance, out Vector3 d)
     {
         d = Vector3.zero;
 
@@ -138,7 +114,7 @@ public class GeoParticle : MonoBehaviour
                 if (c != null && ((c.transform.position - transform.position).sqrMagnitude < SqrSeparationDistance))
                 {
                     Vector3 dst = transform.position - c.transform.position;
-                     d = d.normalized* Mathf.Lerp(1, .5f, Mathf.Min(1, d.sqrMagnitude / (SqrSeparationDistance)));
+                    d = d.normalized * Mathf.Lerp(1, .5f, Mathf.Min(1, d.sqrMagnitude / (SqrSeparationDistance)));
                     d += dst;
                 }
             }
@@ -154,20 +130,15 @@ public class GeoParticle : MonoBehaviour
         d = Vector3.zero;
         if (others.Length > 0)
         {
-
             foreach (GeoParticle c in others)
             {
                 if (c != null)
                 {
-
                     d += c.getVelocity();
-
-            }}
-
+                }
+            }
             d.Normalize();
         }
-
-
     }
 
     void coesion(GeoParticle[] others, Vector3 currPosition, out Vector3 d)
@@ -175,19 +146,15 @@ public class GeoParticle : MonoBehaviour
         d = Vector3.zero;
         if (others.Length > 0)
         {
-
-            foreach (GeoParticle c in others)
+        foreach (GeoParticle c in others)
             {
                 if (c != null)
                 {
 
-                d += c.transform.position;
+                    d += c.transform.position;
                 }
             }
-
-
-            d = (d / others.Length) - currPosition;
-
+           d = (d / others.Length) - currPosition;
             d.Normalize();
         }
 
@@ -197,9 +164,10 @@ public class GeoParticle : MonoBehaviour
 
 
 
-    public void born(int particleKind, float life)
+    public void born(GeoParticleSystem psystem, string name)
     {
-        this.particleKind = particleKind;
+        this.psystem = psystem;
+        gameObject.name = name;
         Start();
     }
 
@@ -214,9 +182,9 @@ public class GeoParticle : MonoBehaviour
         Color color = Color.yellow;
         color.a = .5f;
         Gizmos.color = color;
-        Gizmos.DrawWireSphere(transform.position, particleFieldOfVision);
+        Gizmos.DrawWireSphere(transform.position, psystem.particleFieldOfVision);
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, separationDistance);
+        Gizmos.DrawWireSphere(transform.position, psystem.separationDistance);
 
     }
 
@@ -225,9 +193,11 @@ public class GeoParticle : MonoBehaviour
 
 
 
-
     Vector3 _currvelocity;
     Vector3 _currAcceleration;
+
+    [SerializeField]
+    float cur_Velocity;
 
     public void addForce(Vector3 force)
     {
@@ -242,15 +212,18 @@ public class GeoParticle : MonoBehaviour
     }
     public void UpdatePosition()
     {
-        _currvelocity += _currAcceleration * Time.deltaTime;
-        transform.position += _currvelocity * Time.deltaTime;
-        _currAcceleration = Vector3.zero;
 
     }
 
 
     public void Update()
+
     {
-        UpdatePosition();
+        _currvelocity += _currAcceleration* Time.smoothDeltaTime;
+        transform.position += _currvelocity * Time.smoothDeltaTime;
+        _currAcceleration = Vector3.zero;
+
+        cur_Velocity = _currvelocity.magnitude;
+
     }
 }

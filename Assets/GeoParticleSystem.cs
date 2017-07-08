@@ -20,13 +20,21 @@ public class GeoParticleSystem : MonoBehaviour
     [Range(0, 1)]
     public float seekForce;
     [Range(0, 1)]
-    public float randomForce;
+    public float wanderForce;
     public float particleFieldOfVision;
-    public float particleVelocity;
+    public float maxVelocity;
+    public float averageVelocity;
     public Transform particleTarget;
     public GeoParticle particlePrefab;
     public TextMeshPro particlesText;
-    public  float separationDistance;
+    public string particleSufix = "p_";
+
+
+    public float separationDistance
+    ;
+    public float SqrSeparationDistance;
+    
+
     [Range(1, 100)]
     public int neighborLimit = 10;
     public List<GeoParticle> particles;
@@ -40,26 +48,23 @@ public class GeoParticleSystem : MonoBehaviour
     }
 
     float lastTimeFired;
+    [Range(0,1)]
+    public  float wanderRadius;
 
     void Update()
     {
-        GeoParticle.separationForce = separationForce;
-        GeoParticle.coesionForce = coesionForce;
-        GeoParticle.particleFieldOfVision = particleFieldOfVision;
-        GeoParticle.target = particleTarget;
-        GeoParticle.maxVelocity = particleVelocity;
-        GeoParticle.alignForce = alignForce;
-        GeoParticle.seekForce = seekForce;
-        GeoParticle.wanderForce = randomForce;
-        GeoParticle.separationDistance = separationDistance;
-        GeoParticle.neighborLimit = neighborLimit;
+
+
+
+
     }
     private void FixedUpdate()
     {
-      //  GameObject[] particles = GameObject.FindGameObjectsWithTag("Particle");
-    
-            particlesText.text = "" + particles.Count;
-        if (particles.Count < particleQuantity)
+        SqrSeparationDistance= separationDistance * separationDistance;
+        //  GameObject[] particles = GameObject.FindGameObjectsWithTag("Particle");
+        int particlesCount = particles.Count;
+            particlesText.text = "" + particlesCount;
+        if (particlesCount < particleQuantity)
         {
             float quantity = (Time.time - lastTimeFired) * particlesPerSecond;
             if (quantity > 1)
@@ -67,10 +72,10 @@ public class GeoParticleSystem : MonoBehaviour
                 lastTimeFired = Time.time;
                 //  print(" particles lenght: " + particles.Length + "quantity" + quantity);
                             int i = 0;
-                while (i < Mathf.Min(quantity, particleQuantity - particles.Count))
+                while (i < Mathf.Min(quantity, particleQuantity - particlesCount))
                 {
                     GeoParticle particle = GameObject.Instantiate(particlePrefab, transform.position+ 25*Random.onUnitSphere, transform.rotation);
-                    particle.born(particleKind, particleLife);
+                    particle.born(this,particleSufix+(particlesCount+ i) );
                     particles.Add(particle);
                     i++;
                 }
