@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 public class GeoParticle : MonoBehaviour
 {
 
@@ -13,25 +13,32 @@ public class GeoParticle : MonoBehaviour
         }
     }
 
- 
+
 
 
     public GeoParticleSystem psystem;
 
-
+    
     // Use this for initialization
     void Start()
     {
 
         collidersarray = new Collider[psystem.neighborLimit];
         buddies = new GeoParticle[psystem.neighborLimit];
+        _currvelocity = Vector3.zero;
+        _currAcceleration = Vector3.zero;
     }
 
     // Update is called once per frame
     Vector3 seek_comp, align_comp, separate_comp, coesion_comp, random_comp;
+    [SerializeField]
     Vector3 desiredVelocity;
+[SerializeField]
     Vector3 force;
-
+    [SerializeField]
+Vector3 _currvelocity;
+    [SerializeField]
+    Vector3 _currAcceleration;
     public Collider[] collidersarray;
     public GeoParticle[] buddies;
 
@@ -41,25 +48,40 @@ public class GeoParticle : MonoBehaviour
 
         // UpdatePosition();
 
-        collidersarray.Initialize();
-        buddies.Initialize();
+        Array.Clear(collidersarray, 0, collidersarray.Length);
+        Array.Clear(buddies, 0, buddies.Length);
 
         int n = Mathf.Min(psystem.neighborLimit, Physics.OverlapSphereNonAlloc(transform.position, psystem.particleFieldOfVision, collidersarray));
-        for (int i = n; i < collidersarray.Length; i++)
-        {
-            collidersarray[i] = null;
-        }
+
         int bud = 0;
+        GeoParticle _tmp_collider;
         for (int i = 0; i < n; i++)
         {
-            _tmp_collider = collidersarray[i].gameObject.GetComponent<GeoParticle>();
-
-            if (_tmp_collider != null &&(string.Compare(_tmp_collider.gameObject.name, gameObject.name)!=0)&&         _tmp_collider.particleKind == psystem.particleKind)
+            if (collidersarray[i].gameObject.name.CompareTo(gameObject.name) != 0)
             {
-                buddies[bud] = _tmp_collider;
-                bud++;
+                _tmp_collider = collidersarray[i].gameObject.GetComponent<GeoParticle>();
+
+                if (_tmp_collider != null && _tmp_collider.particleKind == psystem.particleKind)
+                {
+
+                    buddies[bud] = _tmp_collider;
+                    bud++;
+                }
+
             }
+            else
+
+            {
+                collidersarray[i] = collidersarray[n - 1];
+                collidersarray[n - 1] = null;
+                n = n - 1;
+
+
+
+            }
+
         }
+
 
 
 
@@ -68,15 +90,15 @@ public class GeoParticle : MonoBehaviour
         if (psystem.separationForce > 0) separate(collidersarray, psystem.SqrSeparationDistance, out separate_comp);
         if (psystem.alignForce > 0) align(buddies, out align_comp);
         if (psystem.coesionForce > 0) coesion(buddies, transform.position, out coesion_comp);
-        if (psystem.wanderForce > 0) wander(transform.forward,transform.up,transform.right, psystem.wanderRadius, Time.time , out random_comp);
+        if (psystem.wanderForce > 0) wander(transform.forward, transform.up, transform.right, psystem.wanderRadius, Time.time, out random_comp);
 
 
         desiredVelocity = Vector3.zero
-            + seek_comp * psystem.seekForce
-         + align_comp * psystem.alignForce
-           + coesion_comp * psystem.coesionForce
-            + random_comp * psystem.wanderForce
-               + separate_comp * psystem.separationForce;
+             + seek_comp * psystem.seekForce
+             + align_comp * psystem.alignForce
+             + coesion_comp * psystem.coesionForce
+             + random_comp * psystem.wanderForce
+             + separate_comp * psystem.separationForce;
         ;
 
         desiredVelocity = Vector3.ClampMagnitude(desiredVelocity * psystem.maxVelocity, psystem.maxVelocity);
@@ -91,10 +113,10 @@ public class GeoParticle : MonoBehaviour
 
     float _angle;
     Vector3 _b1, _b2;
-    void wander(Vector3 forward,Vector3 up,Vector3 right,float radius,  float fase,  out Vector3 d)
+    void wander(Vector3 forward, Vector3 up, Vector3 right, float radius, float fase, out Vector3 d)
     {
 
-        d = forward + radius * (right*Mathf.Sin(fase) + up*Mathf.Cos(fase)); 
+        d = forward + radius * (right * Mathf.Sin(fase) + up * Mathf.Cos(fase));
         d.Normalize();
     }
     void seekTarget(Transform target, float SqrdistanceToBreak, out Vector3 d)
@@ -146,7 +168,8 @@ public class GeoParticle : MonoBehaviour
         d = Vector3.zero;
         if (others.Length > 0)
         {
-        foreach (GeoParticle c in others)
+
+            foreach (GeoParticle c in others)
             {
                 if (c != null)
                 {
@@ -154,10 +177,10 @@ public class GeoParticle : MonoBehaviour
                     d += c.transform.position;
                 }
             }
-           d = (d / others.Length) - currPosition;
+            d = (d / others.Length) - currPosition;
             d.Normalize();
-        }
 
+        }
 
 
     }
@@ -180,7 +203,6 @@ public class GeoParticle : MonoBehaviour
     public void OnDrawGizmos()
     {
         Color color = Color.yellow;
-        color.a = .5f;
         Gizmos.color = color;
         Gizmos.DrawWireSphere(transform.position, psystem.particleFieldOfVision);
         Gizmos.color = Color.blue;
@@ -193,8 +215,7 @@ public class GeoParticle : MonoBehaviour
 
 
 
-    Vector3 _currvelocity;
-    Vector3 _currAcceleration;
+
 
     [SerializeField]
     float cur_Velocity;
@@ -219,7 +240,7 @@ public class GeoParticle : MonoBehaviour
     public void Update()
 
     {
-        _currvelocity += _currAcceleration* Time.smoothDeltaTime;
+        _currvelocity += _currAcceleration * Time.smoothDeltaTime;
         transform.position += _currvelocity * Time.smoothDeltaTime;
         _currAcceleration = Vector3.zero;
 

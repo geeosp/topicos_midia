@@ -52,19 +52,9 @@ public class GeoParticleSystem : MonoBehaviour
     public  float wanderRadius;
 
     void Update()
-    {
-
-
-
-
-    }
-    private void FixedUpdate()
-    {
-        SqrSeparationDistance= separationDistance * separationDistance;
-        //  GameObject[] particles = GameObject.FindGameObjectsWithTag("Particle");
-        int particlesCount = particles.Count;
+    { int particlesCount = particles.Count;
             particlesText.text = "" + particlesCount;
-        if (particlesCount < particleQuantity)
+if (particlesCount < particleQuantity)
         {
             float quantity = (Time.time - lastTimeFired) * particlesPerSecond;
             if (quantity > 1)
@@ -81,5 +71,16 @@ public class GeoParticleSystem : MonoBehaviour
                 }
             }
         }
+
+
+
+    }
+    
+    private void FixedUpdate()
+    {
+        SqrSeparationDistance= separationDistance * separationDistance;
+        //  GameObject[] particles = GameObject.FindGameObjectsWithTag("Particle");
+       
+        
     }
 }

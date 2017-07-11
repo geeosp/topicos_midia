@@ -147,10 +147,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1684952927556574, guid: 43a2b829fb7938b448199979c6c13284, type: 2}
-      propertyPath: m_Name
-      value: ParticleSystem_100
-      objectReference: {fileID: 0}
     - target: {fileID: 114938950904577190, guid: 43a2b829fb7938b448199979c6c13284,
         type: 2}
       propertyPath: m_havePropertiesChanged
@@ -166,14 +162,24 @@ Prefab:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 4608086748257826, guid: 43a2b829fb7938b448199979c6c13284, type: 2}
-      propertyPath: m_LocalPosition.z
+    - target: {fileID: 1684952927556574, guid: 43a2b829fb7938b448199979c6c13284, type: 2}
+      propertyPath: m_Name
+      value: ParticleSystem_100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114058376858325644, guid: 43a2b829fb7938b448199979c6c13284,
+        type: 2}
+      propertyPath: alignForce
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114564880690690686, guid: 43a2b829fb7938b448199979c6c13284,
+    - target: {fileID: 114058376858325644, guid: 43a2b829fb7938b448199979c6c13284,
         type: 2}
-      propertyPath: m_Enabled
-      value: 1
+      propertyPath: seekForce
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114058376858325644, guid: 43a2b829fb7938b448199979c6c13284,
+        type: 2}
+      propertyPath: coesionForce
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 43a2b829fb7938b448199979c6c13284, type: 2}
