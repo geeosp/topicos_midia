@@ -163,24 +163,29 @@ Vector3 _currvelocity;
         }
     }
 
-    void coesion(GeoParticle[] others, Vector3 currPosition, out Vector3 d)
+    void coesion(GeoParticle[] others,Vector3 currPosition, out Vector3 d)
     {
         d = Vector3.zero;
-        if (others.Length > 0)
-        {
+        
+        
+        
+         
+        
+			int i = 0;
 
             foreach (GeoParticle c in others)
             {
                 if (c != null)
                 {
-
+					i++;
                     d += c.transform.position;
                 }
             }
-            d = (d / others.Length) - currPosition;
-            d.Normalize();
-
-        }
+		if (i > 0) {
+			d = (d / i) - currPosition;
+			d.Normalize ();
+		}
+        
 
 
     }
