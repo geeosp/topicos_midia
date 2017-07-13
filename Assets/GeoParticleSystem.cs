@@ -5,7 +5,13 @@ using UnityEngine;
 
 public class GeoParticleSystem : MonoBehaviour
 {
-    public int particleKind;
+    public enum ParticleType
+    {
+        BIRD, FALCON, FISH, SHARK
+    }
+
+
+    public ParticleType particleKind;
     public float particleLife;
     public long particleQuantity;
     public float particlesPerSecond;
@@ -50,6 +56,18 @@ public class GeoParticleSystem : MonoBehaviour
     float lastTimeFired;
     [Range(0,1)]
     public  float wanderRadius;
+
+
+
+
+
+
+
+
+
+
+   
+
 
     void Update()
     { int particlesCount = particles.Count;
