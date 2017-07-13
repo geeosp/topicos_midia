@@ -194,8 +194,7 @@ MonoBehaviour:
   maxVelocity: 15
   averageVelocity: 0
   particleTarget: {fileID: 0}
-  particlePrefab: {fileID: 114872003644499524, guid: 61c4d51d07942284a971e4c18b690da5,
-    type: 2}
+  particlePrefab: {fileID: 0}
   particlesText: {fileID: 114938950904577190}
   particleSufix: p_
   separationDistance: 2.52
