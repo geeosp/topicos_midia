@@ -40,6 +40,10 @@ public class GeoParticle : MonoBehaviour
     Vector3 _currvelocity;
     [SerializeField]
     Vector3 _currAcceleration;
+
+   
+
+
     public Collider[] collidersarray;
     public GeoParticle[] buddies;
 
@@ -47,7 +51,7 @@ public class GeoParticle : MonoBehaviour
     {
         _currAcceleration = Vector3.zero;
         Array.Clear(collidersarray, 0, collidersarray.Length);
-        Array.Clear(buddies, 0, buddies.Length);
+        Array.Clear(buddies, 0, buddies.Length); 
 
 
 
@@ -74,12 +78,13 @@ public class GeoParticle : MonoBehaviour
 
 
         desiredVelocity = Vector3.zero
-             + seek_comp * psystem.seekForce
-             + align_comp * psystem.alignForce
-             + coesion_comp * psystem.coesionForce
-           + wander_comp * psystem.wanderForce
-         + separate_comp * psystem.separationForce;
+            + seek_comp * psystem.seekForce
+            + align_comp * psystem.alignForce
+            + coesion_comp * psystem.coesionForce
+            + wander_comp * psystem.wanderForce
+            + separate_comp * psystem.separationForce;
         ;
+
 
         desiredVelocity = Vector3.ClampMagnitude(desiredVelocity * psystem.maxVelocity, psystem.maxVelocity);
 
@@ -195,7 +200,7 @@ public class GeoParticle : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, psystem.separationDistance);
 
     }
-    
+
 
 
     public void addForce(Vector3 force)

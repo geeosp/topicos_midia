@@ -10,16 +10,20 @@ public class GeoParticleSystem : MonoBehaviour
         BIRD, FALCON, FISH, SHARK
     }
 
-
+    public string particleSufix = "p_";
     public ParticleType particleKind;
-    public float particleLife;
+    public Transform particleTarget;
+    public List<GeoParticleSystem.ParticleType> typesToChase;
+    public List<GeoParticleSystem.ParticleType> typesToAvoid;
+    
     public long particleQuantity;
     public float particlesPerSecond;
+    public float maxVelocity;
 
+    public float particleFieldOfVision;
     [Range(0, 5)]
     public float separationForce;
     [Range(0, 1)]
-
     public float coesionForce;
     [Range(0, 1)]
     public float alignForce;
@@ -27,17 +31,10 @@ public class GeoParticleSystem : MonoBehaviour
     public float seekForce;
     [Range(0, 1)]
     public float wanderForce;
-    public float particleFieldOfVision;
-    public float maxVelocity;
-    public float averageVelocity;
-    public Transform particleTarget;
-    public GeoParticle particlePrefab;
+    public List<GeoParticle> particlePrefab;
     public TextMeshPro particlesText;
-    public string particleSufix = "p_";
 
-
-    public float separationDistance
-    ;
+    public float separationDistance;
     public float SqrSeparationDistance;
     
 
@@ -82,7 +79,8 @@ if (particlesCount < particleQuantity)
                             int i = 0;
                 while (i < Mathf.Min(quantity, particleQuantity - particlesCount))
                 {
-                    GeoParticle particle = GameObject.Instantiate(particlePrefab, transform.position+ 25*Random.onUnitSphere, transform.rotation);
+                    GeoParticle go = particlePrefab[((int)Time.time)% particlePrefab.Count];
+                    GeoParticle particle = GameObject.Instantiate(go, transform.position+ Random.onUnitSphere, transform.rotation);
                     particle.born(this,particleSufix+(particlesCount+ i) );
                     particles.Add(particle);
                     i++;

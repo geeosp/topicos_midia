@@ -14,7 +14,7 @@ public class RotatingTarget : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         Vector3 pos = Vector3.zero;
-        pos = new Vector2(Mathf.Sin(velocity*Time.time), Mathf.Cos(velocity*Time.time));
+        pos = new Vector2(Mathf.Sin(velocity*Time.time),0);
         transform.position = initialPosition+radius * pos;
 	}
 }
