@@ -147,6 +147,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114071288422819492, guid: 26b2d290c917e204dba2ea45b6a4aaf3,
+        type: 2}
+      propertyPath: particleTarget
+      value: 
+      objectReference: {fileID: 818792425}
     - target: {fileID: 33218663531220752, guid: 26b2d290c917e204dba2ea45b6a4aaf3,
         type: 2}
       propertyPath: m_Mesh
@@ -162,9 +167,19 @@ Prefab:
       propertyPath: m_isInputParsingRequired
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114071288422819492, guid: 26b2d290c917e204dba2ea45b6a4aaf3,
+        type: 2}
+      propertyPath: particleSufix
+      value: pln__
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 26b2d290c917e204dba2ea45b6a4aaf3, type: 2}
   m_IsPrefabParent: 0
+--- !u!4 &818792425 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4378777162678190, guid: 43a2b829fb7938b448199979c6c13284,
+    type: 2}
+  m_PrefabInternal: {fileID: 1449380710}
 --- !u!1001 &1449380710
 Prefab:
   m_ObjectHideFlags: 0
@@ -204,18 +219,69 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1684952927556574, guid: 43a2b829fb7938b448199979c6c13284, type: 2}
-      propertyPath: m_Name
-      value: ParticleSystem_birds_100
-      objectReference: {fileID: 0}
-    - target: {fileID: 1684952927556574, guid: 43a2b829fb7938b448199979c6c13284, type: 2}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 33062614601674804, guid: 43a2b829fb7938b448199979c6c13284,
         type: 2}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114938950904577190, guid: 43a2b829fb7938b448199979c6c13284,
+        type: 2}
+      propertyPath: m_havePropertiesChanged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114938950904577190, guid: 43a2b829fb7938b448199979c6c13284,
+        type: 2}
+      propertyPath: m_isInputParsingRequired
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1684952927556574, guid: 43a2b829fb7938b448199979c6c13284, type: 2}
+      propertyPath: m_Name
+      value: ParticleSystem_birds_100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114058376858325644, guid: 43a2b829fb7938b448199979c6c13284,
+        type: 2}
+      propertyPath: separationForce
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114058376858325644, guid: 43a2b829fb7938b448199979c6c13284,
+        type: 2}
+      propertyPath: seekForce
+      value: 0.282
+      objectReference: {fileID: 0}
+    - target: {fileID: 114058376858325644, guid: 43a2b829fb7938b448199979c6c13284,
+        type: 2}
+      propertyPath: wanderForce
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114058376858325644, guid: 43a2b829fb7938b448199979c6c13284,
+        type: 2}
+      propertyPath: chaseBoostVelocity
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114058376858325644, guid: 43a2b829fb7938b448199979c6c13284,
+        type: 2}
+      propertyPath: mainVelocity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114058376858325644, guid: 43a2b829fb7938b448199979c6c13284,
+        type: 2}
+      propertyPath: neighborLimit
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114058376858325644, guid: 43a2b829fb7938b448199979c6c13284,
+        type: 2}
+      propertyPath: alignForce
+      value: 0.364
+      objectReference: {fileID: 0}
+    - target: {fileID: 114058376858325644, guid: 43a2b829fb7938b448199979c6c13284,
+        type: 2}
+      propertyPath: coesionForce
+      value: 0.393
+      objectReference: {fileID: 0}
+    - target: {fileID: 114058376858325644, guid: 43a2b829fb7938b448199979c6c13284,
+        type: 2}
+      propertyPath: particleFieldOfVision
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 43a2b829fb7938b448199979c6c13284, type: 2}

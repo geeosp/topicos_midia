@@ -84,7 +84,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1661530712273804}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -4.520323, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224666695355182474}
@@ -181,27 +181,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ef150303809d51439408525539ab10b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particleSufix: p_
-  particleKind: 1
-  particleTarget: {fileID: 4483044070333394}
-  typesToChase: 
-  typesToAvoid: 01000000
-  particleQuantity: 10
-  particlesPerSecond: 50
-  maxVelocity: 15
-  particleFieldOfVision: 4
-  separationForce: 2.96
-  coesionForce: 1
-  alignForce: 0.465
-  seekForce: 1
-  wanderForce: 0.524
+  particleSufix: pln__
   particlePrefab:
   - {fileID: 114814202364565352, guid: fb2c8ed85679024489baf5ddf84ca6ea, type: 2}
-  particlesText: {fileID: 114506501557127080}
+  particleKind: 1
+  particleTarget: {fileID: 0}
+  typesToChase: 00000000
+  typesToAvoid: 
+  particleQuantity: 10
+  particlesPerSecond: 1
+  mainVelocity: 15
+  particleFieldOfVision: 10
+  neighborLimit: 5
+  separationForce: 2.96
+  coesionForce: 0
+  alignForce: 0
+  seekForce: 0.554
+  wanderForce: 1
+  chaseBoostVelocity: 1.5
   separationDistance: 2
   SqrSeparationDistance: 4
-  neighborLimit: 5
-  particles: []
+  particles:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   wanderRadius: 1
 --- !u!114 &114361474928530246
 MonoBehaviour:
@@ -216,7 +226,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radius: 6
   velocity: -0.5
-  initialPosition: {x: 21.47, y: 7.65, z: 0}
+  initialPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &114506501557127080
 MonoBehaviour:
   m_ObjectHideFlags: 1
