@@ -12,5 +12,8 @@ EditorBuildSettings:
     path: Assets/Testes/NewTypeOfParticle/othecollides.unity
     guid: fe595321558b8624680b44920e9341dd
   - enabled: 1
-    path: Assets/Teste_100/Teste_100.unity
+    path: Assets/_Birds/Birds_100.unity
     guid: 2442dbfb90d96704cbd1181043f45fa8
+  - enabled: 0
+    path: Assets/_Fishs/fishes.unity
+    guid: e37d87c99809f334f84af5b84142e597

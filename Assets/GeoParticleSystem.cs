@@ -9,19 +9,19 @@ public class GeoParticleSystem : MonoBehaviour
     {
         BIRD, FALCON, FISH, SHARK
     }
-
+    public bool is2D;
     public string particleSufix = "p_";
     public List<GeoParticle> particlePrefab;
     public ParticleType particleKind;
     public Transform particleTarget;
     public List<GeoParticleSystem.ParticleType> typesToChase;
     public List<GeoParticleSystem.ParticleType> typesToAvoid;
-    
+
     public long particleQuantity;
     public float particlesPerSecond;
     public float mainVelocity;
 
-    public float particleFieldOfVision;
+
     [Range(1, 100)]
     public int neighborLimit = 10;
     [Range(0, 5)]
@@ -34,12 +34,15 @@ public class GeoParticleSystem : MonoBehaviour
     public float seekForce;
     [Range(0, 1)]
     public float wanderForce;
-	[Range(1, 20)]
-	public float chaseBoostVelocity;
+    [Range(1, 20)]
+    public float chaseBoostVelocity;
 
+
+    public float particleFieldOfVision;
+    public float SqrParticleFieldOfVision;
     public float separationDistance;
     public float SqrSeparationDistance;
-    
+
     public List<GeoParticle> particles;
 
 
@@ -51,36 +54,28 @@ public class GeoParticleSystem : MonoBehaviour
     }
 
     float lastTimeFired;
-    [Range(0,1)]
-    public  float wanderRadius;
+    [Range(0, 1)]
+    public float wanderRadius;
 
-
-
-
-
-
-
-
-
-
-   
+    
 
 
     void Update()
-    { int particlesCount = particles.Count;
-if (particlesCount < particleQuantity)
+    {
+        int particlesCount = particles.Count;
+        if (particlesCount < particleQuantity)
         {
             float quantity = (Time.time - lastTimeFired) * particlesPerSecond;
             if (quantity > 1)
             {
                 lastTimeFired = Time.time;
                 //  print(" particles lenght: " + particles.Length + "quantity" + quantity);
-                            int i = 0;
+                int i = 0;
                 while (i < Mathf.Min(quantity, particleQuantity - particlesCount))
                 {
-                    GeoParticle go = particlePrefab[((int)Time.time)% particlePrefab.Count];
-                    GeoParticle particle = GameObject.Instantiate(go,  Random.insideUnitCircle, transform.rotation);
-                    particle.born(this,particleSufix+(particlesCount+ i) );
+                    GeoParticle go = particlePrefab[((int)Time.time) % particlePrefab.Count];
+                    GeoParticle particle = GameObject.Instantiate(go, Random.insideUnitCircle, transform.rotation);
+                    particle.born(this, particleSufix + (particlesCount + i));
                     particles.Add(particle);
                     i++;
                 }
@@ -90,12 +85,12 @@ if (particlesCount < particleQuantity)
 
 
     }
-    
+
     private void FixedUpdate()
     {
-        SqrSeparationDistance= separationDistance * separationDistance;
-        //  GameObject[] particles = GameObject.FindGameObjectsWithTag("Particle");
-       
-        
+        SqrSeparationDistance = separationDistance * separationDistance;
+        SqrParticleFieldOfVision = particleFieldOfVision * particleFieldOfVision;
+
+
     }
 }
